@@ -308,13 +308,13 @@ namespace sol {
 			detail::typical_chunk_name_t basechunkname = {};
 			const char* chunknametarget = detail::make_chunk_name(code, chunkname, basechunkname);
 			if (luaL_loadbufferx(L, code.data(), code.size(), chunknametarget, to_string(mode).c_str()) || lua_pcall(L, 0, LUA_MULTRET, 0)) {
-				lua_error(L);
+				throw std::runtime_error(lua_tostring(L, -1));
 			}
 		}
 
 		inline void script_file(lua_State* L, const std::string& filename, load_mode mode = load_mode::any) {
 			if (luaL_loadfilex(L, filename.c_str(), to_string(mode).c_str()) || lua_pcall(L, 0, LUA_MULTRET, 0)) {
-				lua_error(L);
+				throw std::runtime_error(lua_tostring(L, -1));
 			}
 		}
 
